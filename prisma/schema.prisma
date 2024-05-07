@@ -18,7 +18,7 @@ model Pedido {
   nombre        String
   fecha_pedido  DateTime
   fecha_entrega DateTime?
-  total         Int
+  total         Int?
   estado        String
 
   contenido Contenido[]
@@ -28,8 +28,8 @@ model Contenido {
   id       Int    @id @default(autoincrement())
   cantidad Int
   producto String
-  precio_u Int
-  subtotal  Int
+  precio_u Int?
+  subtotal  Int?
   pedido   Pedido @relation(fields: [pedidoId], references: [id])
   pedidoId Int
 }

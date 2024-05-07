@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ImprimirPDF from "@/app/objects/pedidos/pdf";
+import { BtnEntregar } from "@/app/objects/pedidos/btn_entregar";
 
 async function getPedido(id) {
   const pedido = await db.pedido.findUnique({
@@ -77,6 +78,9 @@ async function DetallesPedido({ params }) {
             </CardContent>
             <CardFooter>
               <div className=" flex-col space-y-5">
+                {pedido.estado !== "Entregado" && (
+                  <BtnEntregar pedido={pedido} />
+                )}
                 <ImprimirPDF pedido={pedido} />
                 <Button className="w-full">
                   <Link href="/pages/pedidos/dashboard">

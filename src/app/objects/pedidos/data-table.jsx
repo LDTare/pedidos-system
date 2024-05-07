@@ -73,7 +73,7 @@ export function DataTable({ columns, data }) {
             <SelectValue placeholder="Opciones" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="id">ID</SelectItem>
+            <SelectItem value="id">Numero</SelectItem>
             <SelectItem value="nombre">Nombre</SelectItem>
           </SelectContent>
         </Select>

@@ -20,7 +20,6 @@ export async function POST(request){
             data: {
                 nombre: data.nombre,
                 fecha_pedido: date,
-                total: Number(data.total),
                 estado: data.estado
             }
         });

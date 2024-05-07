@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/prisma";
-import { number } from "zod";
 
 export async function GET(){
     try {

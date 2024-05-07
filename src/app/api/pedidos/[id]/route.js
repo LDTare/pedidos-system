@@ -15,12 +15,15 @@ export async function GET(request, { params }){
 }
 
 export async function PUT(request, { params }){
+    const data = await request.json();
     try {
         const pedido = await db.pedido.update({
             where: {
-                id: request.params.id
+                id: Number(params.id)
             },
-            data: request.body
+            data: {
+                ...data,
+            }
         });
         return NextResponse.json(pedido);
     } catch (error) {
