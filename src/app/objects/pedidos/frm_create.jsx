@@ -3,6 +3,7 @@ import { set, z } from "zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
+import { Toaster, toast } from 'sonner'
 
 import {
   Form,
@@ -93,10 +94,10 @@ export default function Formulario_Creacion() {
       });
 
       if (res.ok && res2.ok) {
-        alert("Pedido registrado correctamente");
+        toast.info('Se ha registrado el pedido')
         form.reset();
       } else {
-        alert("Error al registrar el pedido");
+        toast.error('Ocurrio un error al registrar el pedido')
       }
     }
   }
@@ -118,6 +119,7 @@ export default function Formulario_Creacion() {
               className="!mt-0"
               onClick={() => {
                 // Redirect to the main page of the system
+                router.refresh();
                 router.push("/pages/pedidos/dashboard");
                 form.reset();
               }}

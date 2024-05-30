@@ -3,6 +3,7 @@ import { set, z } from "zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
+import { Toaster, toast } from 'sonner'
 
 import {
   Form,
@@ -183,6 +184,7 @@ export default function Formulario_Edit() {
       });
 
       if (res.ok && res2.ok) {
+        toast.info("Pedido actualizado");
         router.refresh();
         router.back();
         form.reset({
@@ -193,9 +195,12 @@ export default function Formulario_Edit() {
         setContenido([]);
         setTotal(0);
       } else {
+        toast.error("Ocurrio un error al actualizar el pedido");
         const msg_server = await res2.json();
         setError(msg_server.message);
-        console.log(error);
+        toast.message(error, {
+          description: "Ocurrio un error al actualizar el pedido",
+        })
       }
     }
   }

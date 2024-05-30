@@ -16,7 +16,6 @@ export async function GET (request, { params }) {
 
 export async function PUT (request, { params }) {
   const data = await request.json();
-  console.log(data);
   try {
     for (const item of data) {
       await db.contenido.update({

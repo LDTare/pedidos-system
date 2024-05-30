@@ -1,17 +1,18 @@
-import './globals.css'
-import { Inter as FontSans } from "next/font/google"
+import "./globals.css";
+import { Inter as FontSans } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 export const metadata = {
   title: "Pedidos",
   description: "Pedidos de la empresa",
-}
+};
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
-})
+});
 
 export default function RootLayout({ children }) {
   return (
@@ -23,8 +24,9 @@ export default function RootLayout({ children }) {
           fontSans.variable
         )}
       >
-        {children}
+        <main>{children}</main>
+        <Toaster richColors />
       </body>
     </html>
-  )
+  );
 }
