@@ -3,7 +3,7 @@ import { set, z } from "zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Toaster, toast } from 'sonner'
+import { Toaster, toast } from "sonner";
 
 import {
   Form,
@@ -162,7 +162,7 @@ export default function Formulario_Edit() {
         alert("Error al registrar el pedido");
       }
     } else {
-      const res = await fetch("/api/pedidos/" + params.id, {
+      const res1Promise = fetch("/api/pedidos/" + params.id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -173,18 +173,40 @@ export default function Formulario_Edit() {
           fecha_entrega: fecha_entrega,
           estado: "Entregado",
         }),
+        
       });
 
-      const res2 = await fetch("/api/contenido/" + params.id, {
+      toast.promise(
+        res1Promise.then((res1) => res1.json()),
+        {
+          loading: "Actualizando pedido...",
+          success: "Pedido actualizado",
+          error: "Ocurrio un error al actualizar el pedido",
+        }
+      );
+
+      const res = await res1Promise;
+
+      const res2Promise = fetch("/api/contenido/" + params.id, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data.contenido),
       });
+      
+      toast.promise(
+        res2Promise.then((res2) => res2.json()), 
+        {
+          loading: "Actualizando contenido...",
+          success: "Contenido actualizado",
+          error: "Ocurrio un error al actualizar el contenido",
+        }
+      );
+      
+      const res2 = await res2Promise;
 
       if (res.ok && res2.ok) {
-        toast.info("Pedido actualizado");
         router.refresh();
         router.back();
         form.reset({
@@ -200,7 +222,7 @@ export default function Formulario_Edit() {
         setError(msg_server.message);
         toast.message(error, {
           description: "Ocurrio un error al actualizar el pedido",
-        })
+        });
       }
     }
   }
@@ -328,7 +350,10 @@ export default function Formulario_Edit() {
                           <FormControl>
                             <Input
                               {...field}
-                              value={field.value || (params.id ? contenido[index].precio_u : 0)}
+                              value={
+                                field.value ||
+                                (params.id ? contenido[index].precio_u : 0)
+                              }
                               onChange={(e) => {
                                 field.onChange(e);
                                 const subtotal =

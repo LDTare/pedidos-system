@@ -95,6 +95,7 @@ export default function Formulario_Creacion() {
 
       if (res.ok && res2.ok) {
         toast.info('Se ha registrado el pedido')
+        router.refresh();
         form.reset();
       } else {
         toast.error('Ocurrio un error al registrar el pedido')
