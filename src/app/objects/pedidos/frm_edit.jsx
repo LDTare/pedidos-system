@@ -437,13 +437,16 @@ export default function Formulario_Edit() {
                 type="button"
                 onClick={() => {
                   form.setValue("total", calculateSubtotals()); // Calculate the total
+                  setTotal(calculateSubtotals());
                 }}
               >
                 Calcular total
               </Button>
             </div>
           </div>
-          <Button type="submit" className="!mt-0 w-full">
+          <Button
+          disabled={total === 0}  
+          type="submit" className="!mt-0 w-full">
             Actualizar pedido
           </Button>
         </form>

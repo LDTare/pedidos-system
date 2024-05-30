@@ -3,7 +3,7 @@ import { set, z } from "zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Toaster, toast } from 'sonner'
+import { Toaster, toast } from "sonner";
 
 import {
   Form,
@@ -67,7 +67,7 @@ export default function Formulario_Creacion() {
     console.log(data);
 
     if (!params.id) {
-      const res = await fetch("/api/pedidos", {
+      const promisePedido = fetch("/api/pedidos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,6 +78,17 @@ export default function Formulario_Creacion() {
         }),
       });
 
+      toast.promise(
+        promisePedido,
+        {
+          loading: "Registrando pedido",
+          success: "Se ha registrado el pedido",
+          error: "Ocurrio un error al registrar el pedido",
+        }
+      );
+
+      const res = await promisePedido;
+
       const msg_server = await res.json();
 
       data.contenido = data.contenido.map((item) => ({
@@ -85,7 +96,7 @@ export default function Formulario_Creacion() {
         pedidoId: msg_server.id,
       }));
 
-      const res2 = await fetch("/api/contenido", {
+      const promiseContenido = fetch("/api/contenido", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,12 +104,23 @@ export default function Formulario_Creacion() {
         body: JSON.stringify(data.contenido),
       });
 
+      toast.promise(
+        promiseContenido,
+        {
+          loading: "Registrando contenido",
+          success: "Se ha registrado el contenido",
+          error: "Ocurrio un error al registrar el contenido",
+        }
+      );
+
+      const res2 = await promiseContenido;
+
       if (res.ok && res2.ok) {
-        toast.info('Se ha registrado el pedido')
+        toast.info("Se ha registrado el pedido exitosamente");
         router.refresh();
         form.reset();
       } else {
-        toast.error('Ocurrio un error al registrar el pedido')
+        toast.error("Ocurrio un error al registrar el pedido");
       }
     }
   }
@@ -130,107 +152,107 @@ export default function Formulario_Creacion() {
           </div>
 
           <div className="border rounded-md p-5 my-5 border-slate-400">
-          <div className="relative name py-5">
-            <FormField
-              name="nombre"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-base">
-                    Nombre del cliente
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Ingrese el nombre del cliente"
-                      type="text"
-                      className="mt-3"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className="text-red-500" />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="relative contenido">
-            {fields.map((_, index) => {
-              return (
-                <div key={index}>
-                  <div className="flex gap-x-5 my-5">
-                    <FormField
-                      control={form.control}
-                      key={index}
-                      name={`contenido.${index}.cantidad`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Cantidad</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage className="text-red-500" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      key={index + 1}
-                      name={`contenido.${index}.producto`}
-                      render={({ field }) => (
-                        <FormItem className="w-full">
-                          <FormLabel>Producto</FormLabel>
-                          <FormControl>
-                            <Input {...field} />
-                          </FormControl>
-                          <FormMessage className="text-red-500" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      key={index + 4}
-                      name={`products.${index}.file`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Acciones</FormLabel>
-                          <FormControl>
-                            <Button
-                              onClick={() => {
-                                remove(index);
-                              }}
-                            >
-                              Eliminar
-                            </Button>
-                          </FormControl>
-                          <FormMessage className="text-red-500" />
-                        </FormItem>
-                      )}
-                    />
+            <div className="relative name py-5">
+              <FormField
+                name="nombre"
+                control={form.control}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base">
+                      Nombre del cliente
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Ingrese el nombre del cliente"
+                        type="text"
+                        className="mt-3"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-red-500" />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="relative contenido">
+              {fields.map((_, index) => {
+                return (
+                  <div key={index}>
+                    <div className="flex gap-x-5 my-5">
+                      <FormField
+                        control={form.control}
+                        key={index}
+                        name={`contenido.${index}.cantidad`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Cantidad</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage className="text-red-500" />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        key={index + 1}
+                        name={`contenido.${index}.producto`}
+                        render={({ field }) => (
+                          <FormItem className="w-full">
+                            <FormLabel>Producto</FormLabel>
+                            <FormControl>
+                              <Input {...field} />
+                            </FormControl>
+                            <FormMessage className="text-red-500" />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        key={index + 4}
+                        name={`products.${index}.file`}
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Acciones</FormLabel>
+                            <FormControl>
+                              <Button
+                                onClick={() => {
+                                  remove(index);
+                                }}
+                              >
+                                Eliminar
+                              </Button>
+                            </FormControl>
+                            <FormMessage className="text-red-500" />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="relative products">
-            <FormField
-              control={form.control}
-              name="products"
-              render={() => (
-                <Button
-                  className="w-full my-5"
-                  type="button"
-                  variant="delivery"
-                  onClick={() =>
-                    append({
-                      cantidad: 1,
-                      producto: "Puntada dorada",
-                    })
-                  }
-                >
-                  Agregar producto
-                </Button>
-              )}
-            />
-          </div>
+                );
+              })}
+            </div>
+            <div className="relative products">
+              <FormField
+                control={form.control}
+                name="products"
+                render={() => (
+                  <Button
+                    className="w-full my-5"
+                    type="button"
+                    variant="delivery"
+                    onClick={() =>
+                      append({
+                        cantidad: 1,
+                        producto: "Puntada dorada",
+                      })
+                    }
+                  >
+                    Agregar producto
+                  </Button>
+                )}
+              />
+            </div>
           </div>
           <Button type="submit" className="!mt-0 w-full">
             Registrar pedido

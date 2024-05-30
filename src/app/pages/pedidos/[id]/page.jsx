@@ -28,16 +28,25 @@ async function getPedido(id) {
 
 async function DetallesPedido({ params }) {
   const pedido = await getPedido(params.id);
+  const fecha_pedido = new Date(pedido.fecha_pedido);
+  const fecha_entrega = new Date(pedido.fecha_entrega);
 
   return (
     <div className="flex justify-center items-center h-screen w-full">
       <div className=" flex-col max-w-2xl border p-5 rounded-md">
         <div className=" my-5 w-full rounded-md p-2">
-          <p className="text-center font-bold text-2xl">
-            {" "}
-            Detalles del pedido{" "}
-          </p>
+          <p className="text-center font-bold text-2xl">Detalles del pedido </p>
         </div>
+       <div className=" font-medium mb-5">
+       <p>Cliente: {pedido.nombre}</p>
+        <p>Fecha del pedido: {fecha_pedido.toLocaleDateString()}</p>
+        <p>
+          Fecha de entrega :{" "}
+          {fecha_entrega.getFullYear() <= 1970
+            ? "Pendiente"
+            : fecha_entrega.toLocaleDateString()}
+        </p>
+       </div>
         <div className=" flex-1 space-y-5">
           <Card>
             <CardHeader>
@@ -98,15 +107,11 @@ async function DetallesPedido({ params }) {
               <div className="flex justify-between space-x-5">
                 {pedido.estado === "Pendiente" ? (
                   <BtnPreciosIng pedido={pedido} />
-                ) : (
-                  null
-                )}
+                ) : null}
 
                 {pedido.estado === "Entregado" ? (
                   <BtnEntregar pedido={pedido} />
-                ) : (
-                  null
-                )}
+                ) : null}
                 <ImprimirPDF pedido={pedido} />
               </div>
             </CardFooter>
