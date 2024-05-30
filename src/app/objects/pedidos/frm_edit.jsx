@@ -80,13 +80,24 @@ export default function Formulario_Edit() {
         form.setValue("nombre", pedido_info.nombre);
       };
 
+      const promiseContenido = fetch("/api/contenido/" + params.id, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      toast.promise(
+        promiseContenido,
+        {
+          loading: "Cargando contenido...",
+          success: "Contenido cargado",
+          error: "Ocurrio un error al cargar el contenido",
+        }
+      );
+
       const fetchData = async () => {
-        const res = await fetch("/api/contenido/" + params.id, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const res = await promiseContenido;
         const data = await res.json();
         console.log(data);
         setContenido(data);
@@ -103,7 +114,7 @@ export default function Formulario_Edit() {
       fetchPedido();
       fetchData();
     }
-  }, []);
+  }, [params.id]);
 
   const { fields, append, remove } = useFieldArray({
     name: "contenido",
