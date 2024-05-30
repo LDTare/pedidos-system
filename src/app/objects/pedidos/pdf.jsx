@@ -22,11 +22,15 @@ function createPDF(pedido) {
   }
   doc.text(`Total: Q.${pedido.total}`, 10, 40);
   doc.text("Productos", 10, 50);
-  const productos = pedido.contenido.map((producto) => producto.producto);
   doc.autoTable({
     startY: 60,
-    head: [["Productos"]],
-    body: productos.map((producto) => [producto]),
+    head: [["Productos", "Cantidad", "Precio unitario", "Subtotal"]],
+    body: pedido.contenido.map((producto) => [
+      producto.producto,
+      producto.cantidad,
+      producto.precio_u,
+      producto.subtotal,
+    ]),
   });
   doc.save(`pedido-${pedido.id}.pdf`);
 }
