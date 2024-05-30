@@ -8,9 +8,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import ImprimirPDF from "@/app/objects/pedidos/pdf";
 import { BtnEntregar } from "@/app/objects/pedidos/btn_entregar";
+import { BtnPreciosIng } from "@/app/objects/pedidos/btn_preciosIng";
 
 async function getPedido(id) {
   const pedido = await db.pedido.findUnique({
@@ -29,67 +31,92 @@ async function DetallesPedido({ params }) {
 
   return (
     <div className="flex justify-center items-center h-screen w-full">
-      <div className=" flex-col border p-5 rounded-md">
-        <div className=" my-5 bg-black text-white max-w-xs w-full rounded-md p-2">
-          <p className=" text-center"> Detalles del pedido </p>
+      <div className=" flex-col max-w-2xl border p-5 rounded-md">
+        <div className=" my-5 w-full rounded-md p-2">
+          <p className="text-center font-bold text-2xl">
+            {" "}
+            Detalles del pedido{" "}
+          </p>
         </div>
-        <div className=" flex-1 max-w-xs space-y-5">
+        <div className=" flex-1 space-y-5">
           <Card>
             <CardHeader>
-              <CardTitle> Información del pedido </CardTitle>
+              <CardTitle>
+                <p className="text-xl font-bold">Pedido N° {pedido.id}</p>
+              </CardTitle>
               <CardDescription>
-                <h1>Pedido - No.{pedido.id} </h1>
-                <h2>Cliente: {pedido.nombre}</h2>
-                <p>
-                  Fecha de pedido: {pedido.fecha_pedido.toLocaleDateString()}
-                </p>
-                {pedido.fecha_entrega && (
-                  <p>
-                    Fecha de entrega:{" "}
-                    {pedido.fecha_entrega.toLocaleDateString()}
-                  </p>
-                )}
-                <p>Total: Q.{pedido.total}</p>
+                <p className="text-lg">Estado: {pedido.estado}</p>
               </CardDescription>
             </CardHeader>
-            <CardContent >
-              <div className=" w-full">
-              <h2>Productos</h2>
-              <div className=" flex-1 w-ful">
-                {pedido.contenido.map((producto) => (
-                  <div
-                    className=" text-sm space-x-5 p-1 my-1 border rounded-md w-full"
-                    key={producto.id}
-                  >
-                    <p className=" font-bold" >Producto - {producto.producto}</p>
-                    <p>
-                      Cantidad: {producto.cantidad}
-                    </p>
-                    <p>
-                      Precio: Q.{producto.precio_u}
-                    </p>
-                    <p>
-                      Subtotal: Q.{producto.subtotal}
-                    </p>
-                  </div>
-                ))}
-              </div>
-              </div>
+            <CardContent>
+              <table className="w-full border rounded-md">
+                <thead>
+                  <tr className=" bg-slate-400">
+                    <th className="text-left px-5">Producto</th>
+                    <th className="text-right px-1">Cantidad</th>
+                    <th className="text-right px-1">Precio</th>
+                    <th className="text-right px-1">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pedido.contenido.map((item) => (
+                    <tr
+                      className="border hover:bg-gray-400/80 cursor-default"
+                      key={item.id}
+                    >
+                      <td className=" px-5">{item.producto}</td>
+                      <td className=" text-center border-dotted border">
+                        {item.cantidad ? item.cantidad : "Sin cantidad"}
+                      </td>
+
+                      <td className="text-center border-dotted border">
+                        {item.precio_u ? item.precio_u : "Sin precio"}
+                      </td>
+
+                      <td className="text-center border-dotted border">
+                        {item.subtotal ? item.subtotal : "Sin subtotal"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className=" bg-slate-400">
+                    <td colSpan="3" className="text-left font-bold px-5">
+                      Total
+                    </td>
+                    <td className="text-center font-bold border">
+                      {pedido.contenido.reduce(
+                        (acc, item) => acc + item.cantidad * item.precio_u,
+                        0
+                      )}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
             </CardContent>
             <CardFooter>
-              <div className=" flex-col space-y-5">
-                {pedido.estado !== "Entregado" && (
+              <div className="flex justify-between space-x-5">
+                {pedido.estado === "Pendiente" ? (
+                  <BtnPreciosIng pedido={pedido} />
+                ) : (
+                  null
+                )}
+
+                {pedido.estado === "Entregado" ? (
                   <BtnEntregar pedido={pedido} />
+                ) : (
+                  null
                 )}
                 <ImprimirPDF pedido={pedido} />
-                <Button className="w-full">
-                  <Link href="/pages/pedidos/dashboard">
-                    Regresar al inicio
-                  </Link>
-                </Button>
               </div>
             </CardFooter>
           </Card>
+
+          <div className="mt-2">
+            <Link href="/pages/pedidos/dashboard">
+              <Button variant="secondary">Volver a los pedidos</Button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

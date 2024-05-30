@@ -9,20 +9,21 @@ export function BtnEntregar({ pedido }) {
   return (
     <Button
       className=" w-full"
+      variant="delivery"
       onClick={async () => {
         const res = await fetch("/api/pedidos/" + pedido.id, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ estado: "Entregado", fecha_entrega: fecha}),
+          body: JSON.stringify({ estado: "Cancelado"}),
         });
         console.log(res.json());
         router.refresh();
         router.back();
       }}
     >
-      Entregar
+      Confirmar pago del pedido
     </Button>
   );
 }

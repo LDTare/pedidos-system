@@ -5,7 +5,7 @@ export async function GET(request, { params }){
     try {
         const pedidos = await db.pedido.findUnique({
             where: {
-                id: request.params.id
+                id: Number(params.id)
             }
         });
         return NextResponse.json(pedidos);

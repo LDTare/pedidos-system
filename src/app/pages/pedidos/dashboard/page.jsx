@@ -14,24 +14,24 @@ async function pedidoDahsboard() {
   const pedidos = await cargarPedidos();
   return (
     <section className="container mx-auto py-5">
-      <div className="p-5 bg-black">
-        <h1 className="text-white font-bold text-3xl text-center p-3">Pedidos</h1>
-        <div className="flex items-center justify-evenly">
+      <div className="p-5 border">
+        <h1 className="font-bold text-3xl text-center p-3">Ordenes registradas</h1>
+      </div>
+      <div className="container mx-auto py-5 border">
+      <div className="flex items-center justify-evenly">
         <Link
-          className={buttonVariants({ variant: "outline" })}
+          className={buttonVariants({ variant: "default" })}
           href="/"
         >
           Regresar
         </Link>
         <Link
-          className={buttonVariants({ variant: "outline" })}
+          className={buttonVariants({ variant: "default" })}
           href="/pages/pedidos/new"
         >
           Nuevo pedido
         </Link>
         </div>
-      </div>
-      <div className="container mx-auto py-5 border">
         <DataTable columns={columns} data={pedidos} />
       </div>
     </section>

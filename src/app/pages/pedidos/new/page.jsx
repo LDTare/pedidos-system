@@ -1,11 +1,15 @@
-import { PedidoFRM } from "@/app/objects/pedidos/formulario";
-import Home from "@/app/objects/pedidos/frm_dinamic";
-import Link from "next/link";
+"use client";
+import Formulario_Creacion from "@/app/objects/pedidos/frm_create";
+import Formulario_Edit from "@/app/objects/pedidos/frm_edit";
+import { useParams } from "next/navigation";
 
 function pedidoNew() {
+  const params = useParams();
   return (
     <section className="container mx-auto my-auto">
-      <Home />
+      {
+        params.id ? <Formulario_Edit /> : <Formulario_Creacion />
+      }
     </section>
   );
 }

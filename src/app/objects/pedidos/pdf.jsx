@@ -4,7 +4,9 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 function createPDF(pedido) {
-  const doc = new jsPDF();
+  const doc = new jsPDF({
+    format: "a2"
+  });
   doc.text(`Pedido No. ${pedido.id}`, 10, 10);
   doc.text(
     `Fecha de pedido: ${pedido.fecha_pedido.toLocaleDateString()}`,
@@ -32,7 +34,9 @@ function createPDF(pedido) {
 function ImprimirPDF({ pedido }) {
   return <Button
   onClick={() => createPDF(pedido)}
-  className="w-full">Imprimir recibo</Button>;
+  className="w-full"
+  variant="default"
+  >Imprimir recibo</Button>;
 }
 
 export default ImprimirPDF;

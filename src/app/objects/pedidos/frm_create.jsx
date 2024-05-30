@@ -13,18 +13,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useState,useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
-export default function Home() {
-
+export default function Formulario_Creacion() {
   const params = useParams();
-
-  const [total, setTotal] = useState(0);	
-  const [contenido, setContenido] = useState([]);
-
   const router = useRouter();
 
   const validationSchema = z.object({
@@ -38,10 +32,6 @@ export default function Home() {
           producto: z
             .string()
             .min(1, { message: "Por favor ingrese un producto" }),
-          precio_u: z.coerce.number(
-            { message: "Por favor ingrese un precio" }
-          ),
-          subtotal: z.coerce.number(),
         })
       )
       .nonempty({ message: "Por favor llene todos los campos" }),
@@ -54,16 +44,16 @@ export default function Home() {
       contenido: [],
     },
   });
-  
+
   useEffect(() => {
-    if(params.id){
+    if (params.id) {
       fetch(`/api/pedidos/${params.id}`)
-      .then(res => res.json())
-      .then(data => {
-        form.reset(data);
-        setContenido(data.contenido.map(item => item.subtotal));
-        setTotal(data.total);
-      }); 
+        .then((res) => res.json())
+        .then((data) => {
+          form.reset(data);
+          setContenido(data.contenido.map((item) => item.subtotal));
+          setTotal(data.total);
+        });
     }
   }, [params.id]);
 
@@ -72,36 +62,27 @@ export default function Home() {
     control: form.control,
   });
 
-  const calculateSubtotals = () => {
-    let total = 0;
-    contenido.forEach((subtotal) => {
-      total += subtotal;
-    });
-    return total;
-  };
-
-  async function onSubmit (data) {
-    const subtotals = calculateSubtotals();
-    setTotal(subtotals);
-
+  async function onSubmit(data) {
     console.log(data);
-    
-    if(!params.id){
-       const res = await fetch("/api/pedidos", {
+
+    if (!params.id) {
+      const res = await fetch("/api/pedidos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           nombre: data.nombre,
-          total: subtotals,
           estado: "Pendiente",
         }),
-      })
+      });
 
       const msg_server = await res.json();
-      
-      data.contenido = data.contenido.map(item => ({ ...item, pedidoId: msg_server.id }));
+
+      data.contenido = data.contenido.map((item) => ({
+        ...item,
+        pedidoId: msg_server.id,
+      }));
 
       const res2 = await fetch("/api/contenido", {
         method: "POST",
@@ -114,40 +95,39 @@ export default function Home() {
       if (res.ok && res2.ok) {
         alert("Pedido registrado correctamente");
         form.reset();
-        setContenido([]);
-        setTotal(0);
       } else {
         alert("Error al registrar el pedido");
       }
     }
-  };
+  }
 
   return (
     <div className="flex justify-center items-center h-screen w-full">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex-1 max-w-xl space-y-5"
+          className="flex-1 max-w-2xl p-5 border rounded-md border-slate-400"
         >
-
-          <Button 
-          type="reset"
-          className="!mt-0 w-full"
-          onClick={() => {
-            // Redirect to the main page of the system
-            router.push("/pages/pedidos/dashboard");
-            form.reset();
-            setContenido([]);
-            setTotal(0);
-          }}
-          >
-            Regresar al inicio
-          </Button>
-
-          <h1 className="text-3xl font-bold text-center">
-            Registrar nuevo pedido
+          <h1 className="text-3xl font-bold text-center my-5">
+            Actualizacion de pedidos
           </h1>
-          <div className="relative name">
+
+          <div className="w-full py-2 border-b border-b-slate-400">
+            <Button
+              type="reset"
+              className="!mt-0"
+              onClick={() => {
+                // Redirect to the main page of the system
+                router.push("/pages/pedidos/dashboard");
+                form.reset();
+              }}
+            >
+              Regresar al inicio
+            </Button>
+          </div>
+
+          <div className="border rounded-md p-5 my-5 border-slate-400">
+          <div className="relative name py-5">
             <FormField
               name="nombre"
               control={form.control}
@@ -173,7 +153,7 @@ export default function Home() {
             {fields.map((_, index) => {
               return (
                 <div key={index}>
-                  <div className="flex gap-x-5">
+                  <div className="flex gap-x-5 my-5">
                     <FormField
                       control={form.control}
                       key={index}
@@ -182,19 +162,7 @@ export default function Home() {
                         <FormItem>
                           <FormLabel>Cantidad</FormLabel>
                           <FormControl>
-                            <Input {...field} 
-                            onChange={(e) => {
-                              field.onChange(e);
-                              const subtotal = e.target.value * form.getValues(`contenido.${index}.precio_u`);
-                              setContenido(prev => {
-                                const newContenido = [...prev];
-                                newContenido[index] = subtotal;
-                                return newContenido;
-                              }
-                              );
-                              form.setValue(`contenido.${index}.subtotal`, subtotal);
-                              }}
-                            />
+                            <Input {...field} />
                           </FormControl>
                           <FormMessage className="text-red-500" />
                         </FormItem>
@@ -216,66 +184,17 @@ export default function Home() {
                     />
                     <FormField
                       control={form.control}
-                      key={index + 2}
-                      name={`contenido.${index}.precio_u`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Precio</FormLabel>
-                          <FormControl>
-                            <Input {...field} 
-                             onChange={(e) => {
-                              field.onChange(e);
-                              const subtotal = e.target.value * form.getValues(`contenido.${index}.cantidad`);
-                              setContenido(prev => {
-                                const newContenido = [...prev];
-                                newContenido[index] = subtotal;
-                                return newContenido;
-                              }
-                              );
-                              form.setValue(`contenido.${index}.subtotal`, subtotal);
-                              }}
-                            />
-                          </FormControl>
-                          <FormMessage className="text-red-500 capitalize" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      key={index + 3}
-                      name={`contenido.${index}.subtotal`}
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Subtotal</FormLabel>
-                          <FormControl>
-                            <Input
-                              {...field}
-                              readOnly // Changed value to the one stored in the 'contenido' array
-                            />
-                          </FormControl>
-                          <FormMessage className="text-red-500 capitalize" />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
                       key={index + 4}
                       name={`products.${index}.file`}
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Acciones</FormLabel>
                           <FormControl>
-                            <Button onClick={() => 
-                            {
-                              remove(index);
-                              setContenido(prev => {
-                                const newContenido = [...prev];
-                                newContenido.splice(index, 1);
-                                return newContenido;
-                              }
-                              );
-                            }
-                            }>
+                            <Button
+                              onClick={() => {
+                                remove(index);
+                              }}
+                            >
                               Eliminar
                             </Button>
                           </FormControl>
@@ -295,12 +214,12 @@ export default function Home() {
               render={() => (
                 <Button
                   className="w-full my-5"
+                  type="button"
+                  variant="delivery"
                   onClick={() =>
                     append({
                       cantidad: 1,
-                      producto: "",
-                      precio_u: 0,
-                      subtotal: 0,
+                      producto: "Puntada dorada",
                     })
                   }
                 >
@@ -309,15 +228,6 @@ export default function Home() {
               )}
             />
           </div>
-          <div className="relative total">
-           {
-              total > 0 && (
-                <div>
-                  <Label>Total de la orden: </Label>
-                  <Label> Q.{total} </Label>
-                </div>
-              )
-           }
           </div>
           <Button type="submit" className="!mt-0 w-full">
             Registrar pedido
