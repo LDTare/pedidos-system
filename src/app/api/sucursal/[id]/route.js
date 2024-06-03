@@ -3,12 +3,12 @@ import { db } from "@/lib/prisma";
 
 export async function GET(request, { params }){
     try {
-        const pedidos = await db.pedido.findUnique({
+        const sucursal = await db.sucursal.findUnique({
             where: {
                 id: Number(params.id)
             }
         });
-        return NextResponse.json(pedidos);
+        return NextResponse.json(sucursal);
     } catch (error) {
         return NextResponse.error(error);
     }
@@ -17,7 +17,7 @@ export async function GET(request, { params }){
 export async function PUT(request, { params }){
     const data = await request.json();
     try {
-        const pedido = await db.pedido.update({
+        const sucursal = await db.sucursal.update({
             where: {
                 id: Number(params.id)
             },
@@ -25,7 +25,7 @@ export async function PUT(request, { params }){
                 ...data,
             }
         });
-        return NextResponse.json(pedido);
+        return NextResponse.json(sucursal);
     } catch (error) {
         return NextResponse.error(error);
     }
@@ -33,12 +33,12 @@ export async function PUT(request, { params }){
 
 export async function DELETE(request, { params }){
     try {
-        const pedido = await db.pedido.delete({
+        const sucursal = await db.sucursal.delete({
             where: {
                 id: Number(params.id)
             }
         });
-        return NextResponse.json(pedido);
+        return NextResponse.json(sucursal);
     } catch (error) {
         return NextResponse.error(error);
     }

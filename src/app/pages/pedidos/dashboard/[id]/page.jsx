@@ -2,16 +2,20 @@ import { db } from "@/lib/prisma";
 import Link from "next/link";
 import { columns } from "@/app/objects/pedidos/columns";
 import { DataTable } from "@/app/objects/pedidos/data-table";
-import { buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button";
 
-async function cargarPedidos() {
-  return await db.pedido.findMany();
+async function cargarPedidos(id_sucursal) {
+  return await db.pedido.findMany({
+    where: {
+      sucursalId: parseInt(id_sucursal),
+    },
+  });
 }
 
 export const dynamic = "force-dynamic";
 
-async function pedidoDahsboard() {
-  const pedidos = await cargarPedidos();
+async function pedidoDahsboard({ params }) {
+  const pedidos = await cargarPedidos(params.id);
   return (
     <section className="p-5 h-auto w-auto">
       <div className="p-5 border">
@@ -27,7 +31,7 @@ async function pedidoDahsboard() {
         </Link>
         <Link
           className={buttonVariants({ variant: "default" })}
-          href="/pages/pedidos/new"
+          href={`/pages/pedidos/new?id=${params.id}`}
         >
           Nuevo pedido
         </Link>

@@ -3,28 +3,24 @@ import { db } from "@/lib/prisma";
 
 export async function GET(){
     try {
-        const pedidos = await db.pedido.findMany([]);
-        return NextResponse.json(pedidos);
+        const sucursales = await db.sucursal.findMany([]);
+        return NextResponse.json(sucursales);
     } catch (error) {
-        return NextResponse.error(error);
+        return NextResponse.json({ message: error.message }, { status: 500 });
     }
 }
 
 export async function POST(request){
     const data = await request.json();
-    const date = new Date();
-
-    console.log(data);
     try {
-        const pedido = await db.pedido.create({
+        const sucursal = await db.sucursales.create({
             data: {
-                sucursalId: Number(data.sucursalId),
                 nombre: data.nombre,
-                fecha_pedido: date,
-                estado: data.estado
+                direccion: data.direccion,
+                telefono: data.telefono
             }
         });
-        return NextResponse.json(pedido);
+        return NextResponse.json(sucursal);
     } catch (error) {
         return NextResponse.json({ message: error.message }, { status: 500 });
     }

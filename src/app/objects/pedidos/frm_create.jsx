@@ -15,12 +15,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 
 export default function Formulario_Creacion() {
   const params = useParams();
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+
+  const id = searchParams.get("id");
 
   const validationSchema = z.object({
     nombre: z.string().min(1, {
@@ -73,6 +77,7 @@ export default function Formulario_Creacion() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          sucursalId: id,
           nombre: data.nombre,
           estado: "Pendiente",
         }),
@@ -143,7 +148,7 @@ export default function Formulario_Creacion() {
               onClick={() => {
                 // Redirect to the main page of the system
                 router.refresh();
-                router.push("/pages/pedidos/dashboard");
+                router.back();
                 form.reset();
               }}
             >

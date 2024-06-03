@@ -1,8 +1,11 @@
 "use client";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
-import { buttonVariants } from "@/components/ui/button"
-import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+
+import { guardarSucursal } from "./utils/sucursal";
 
 import {
   Card,
@@ -13,7 +16,40 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import { useEffect, useState } from "react";
+
+import { toast } from "sonner";
+
 export default function Home() {
+  const [error, setError] = useState(null);
+  const [sucursales, setSucursales] = useState([]);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const response = fetch("/api/sucursal", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    toast.promise(response, {
+      loading: "Cargando...",
+      success: "Sucursales cargada",
+      error: "Error al cargar contenido",
+    });
+
+    const fetchSucursal = async () => {
+      const res = await response;
+      const data = await res.json();
+
+      if (res.ok) setSucursales(data);
+      else setError(data.message);
+    };
+    fetchSucursal();
+  }, []);
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <div className=" bg-slate-400 rounded-2xl text-slate-100 p-7 space-y-5 flex flex-col items-center justify-center">
@@ -36,35 +72,30 @@ export default function Home() {
           height={400}
         />
         <div className="p-5 flex w-full space-x-5 items-center justify-center">
-          <Card>
-            <CardHeader>
-              <CardTitle>La puntada Dorada</CardTitle>
-              <CardDescription>
-                San Francisco el Alto, Totonicapan
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>Sitio estatico</p>
-            </CardContent>
-            <CardFooter>
-            <Link href={"/pages/web_sites"} className={buttonVariants({ variant: "outline" })}>Ir al sitio estatico</Link> 
-            </CardFooter>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>La puntada Dorada</CardTitle>
-              <CardDescription>
-                San Francisco el Alto, Totonicapan
-              </CardDescription>
-
-            </CardHeader>
-            <CardContent>
-              <p>Sistema de pedidos</p>
-            </CardContent>
-            <CardFooter>
-            <Link href={"/pages/pedidos/dashboard"} className={buttonVariants({ variant: "outline" })}>Ir a la beta del sistema</Link>
-            </CardFooter>
-          </Card>
+          {
+            sucursales.map((sucursal) => (
+              <Card key={sucursal.id}>
+                <CardHeader>
+                  <CardTitle>{sucursal.nombre}</CardTitle>
+                  <CardDescription>{sucursal.direccion}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p> {sucursal.descripcion} </p>
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    className={buttonVariants({ variant: "default" })}
+                    onClick={() => {
+                      guardarSucursal(sucursal);
+                      router.push("/pages/pedidos/dashboard/" + sucursal.id);
+                    }}
+                  >
+                    Ver
+                  </Button>
+                </CardFooter>
+              </Card>
+            ))
+          }
         </div>
       </div>
     </main>
