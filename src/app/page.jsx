@@ -47,7 +47,7 @@ export default function Home() {
               <p>Sitio estatico</p>
             </CardContent>
             <CardFooter>
-            <Link href={"#"} className={buttonVariants({ variant: "outline" })}>Ir al sitio estatico</Link> 
+            <Link href={"/pages/web_sites"} className={buttonVariants({ variant: "outline" })}>Ir al sitio estatico</Link> 
             </CardFooter>
           </Card>
           <Card>

@@ -10,7 +10,7 @@ function createPDF(pedido) {
     format: "a4",
   });
 
-  doc.rect(25, 15, 160, 100, "S");
+  doc.rect(25, 15, 155, 100, "S");
   doc.setFontSize(15);
   doc.text("LA PUNTADA DORADA", 45, 25);
 
@@ -33,29 +33,29 @@ function createPDF(pedido) {
   doc.text(`NO. ${pedido.id} - ` + year, 130, 33);
 
   doc.setFontSize(10.5);
-  doc.rect(33, 37, 137, 13, "S");
+  doc.rect(33, 37, 137, 14, "S");
 
   //cliente
   doc.text(`Cliente: ${pedido.nombre}`, 35, 42);
 
-  doc.line(33, 43, 170, 43);
+  doc.line(33, 44, 170, 44);
   doc.text(
     `Fecha de pedido: ${pedido.fecha_pedido.toLocaleDateString()}`,
     105,
-    48
+    49
   );
 
-  doc.line(100, 43, 100, 50);
+  doc.line(100, 44, 100, 51);
 
   if (pedido.fecha_entrega) {
     doc.text(
       `Fecha de entrega: ${pedido.fecha_entrega.toLocaleDateString()}`,
       35,
-      48
+      49
     );
   }
   else{
-    doc.text(`Fecha de entrega: ${pedido.estado} `, 35, 48);
+    doc.text(`Fecha de entrega: ${pedido.estado} `, 35, 49);
   }
   
   if(pedido.total > 0){
@@ -71,9 +71,9 @@ function createPDF(pedido) {
   doc.autoTable({
     startY: 52,
     theme: "grid",
-    tableWidth: 138,
+    tableWidth: 137,
     margin:{
-      left:32,
+      left:33,
     },
     head: [["Cantidad", "Productos", "Precio unitario"]],
     body: pedido.contenido.map((producto) => [
