@@ -11,7 +11,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ImprimirPDF from "@/app/objects/pedidos/pdf";
 import { BtnEntregar } from "@/app/objects/pedidos/btn_entregar";
-import { BtnPreciosIng } from "@/app/objects/pedidos/btn_preciosIng";
+import { BtnPreciosIng } from "@/app/objects/pedidos/btn_preciosIng"; 
+import BtnRegresar from "@/app/objects/pedidos/btn_regresar";
 
 async function getPedido(id) {
   const pedido = await db.pedido.findUnique({
@@ -111,15 +112,15 @@ async function DetallesPedido({ params }) {
                 {pedido.estado === "Entregado" ? (
                   <BtnEntregar pedido={pedido} />
                 ) : null}
+                
                 <ImprimirPDF pedido={pedido} />
+
               </div>
             </CardFooter>
           </Card>
 
           <div className="mt-2">
-            <Link href="/pages/pedidos/dashboard">
-              <Button variant="secondary">Volver a los pedidos</Button>
-            </Link>
+            <BtnRegresar />
           </div>
         </div>
       </div>

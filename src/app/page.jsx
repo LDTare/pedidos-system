@@ -36,7 +36,7 @@ export default function Home() {
 
     toast.promise(response, {
       loading: "Cargando...",
-      success: "Sucursales cargada",
+      success: "Sucursales cargadas correctamente",
       error: "Error al cargar contenido",
     });
 
@@ -71,10 +71,20 @@ export default function Home() {
           width={400}
           height={400}
         />
+
+        <Button
+        onClick={() => {
+          router.push("/pages/web_site");
+        }
+        }
+        >
+          Visitar sitio web
+        </Button>
+
         <div className="p-5 flex w-full space-x-5 items-center justify-center">
           {
             sucursales.map((sucursal) => (
-              <Card key={sucursal.id}>
+              <Card className="min-w-60 max-w-60"  key={sucursal.id}>
                 <CardHeader>
                   <CardTitle>{sucursal.nombre}</CardTitle>
                   <CardDescription>{sucursal.direccion}</CardDescription>
@@ -84,13 +94,13 @@ export default function Home() {
                 </CardContent>
                 <CardFooter>
                   <Button
-                    className={buttonVariants({ variant: "default" })}
+                    variant="outline"
                     onClick={() => {
                       guardarSucursal(sucursal);
                       router.push("/pages/pedidos/dashboard/" + sucursal.id);
                     }}
                   >
-                    Ver
+                    Ir a la sucursal
                   </Button>
                 </CardFooter>
               </Card>

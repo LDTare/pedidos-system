@@ -4,7 +4,6 @@ import Formulario_Edit from "@/app/objects/pedidos/frm_edit";
 import { useParams } from "next/navigation";
 import { Suspense } from "react";
 
-
 function SearchBarFallback() {
   return <>placeholder</>
 }
