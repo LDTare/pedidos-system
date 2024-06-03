@@ -15,16 +15,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import SearchBar from "../search-bar";
 
 export default function Formulario_Creacion() {
   const params = useParams();
   const router = useRouter();
 
-  const searchParams = useSearchParams();
-
-  const id = searchParams.get("id");
+  const id = SearchBar();
+  console.log(id);
 
   const validationSchema = z.object({
     nombre: z.string().min(1, {
