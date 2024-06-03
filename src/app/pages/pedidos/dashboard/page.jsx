@@ -8,16 +8,16 @@ async function cargarPedidos() {
   return await db.pedido.findMany();
 }
 
-export const dynamic = "force-async";
+export const dynamic = "force-dynamic";
 
 async function pedidoDahsboard() {
   const pedidos = await cargarPedidos();
   return (
-    <section className="container mx-auto py-5">
+    <section className="p-5 h-auto w-auto">
       <div className="p-5 border">
         <h1 className="font-bold text-3xl text-center p-3">Ordenes registradas</h1>
       </div>
-      <div className="container mx-auto py-5 border">
+      <div className="container mx-auto py-5">
       <div className="flex items-center justify-evenly">
         <Link
           className={buttonVariants({ variant: "default" })}

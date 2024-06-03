@@ -85,9 +85,11 @@ export function DataTable({ columns, data }) {
           className="max-w-sm"
         />
       </div>
-      <div className="rounded-md border bg-slate-300">
+      <div className="rounded-md border">
         <Table>
-          <TableHeader>
+          <TableHeader
+          className=""
+          >
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -109,11 +111,13 @@ export function DataTable({ columns, data }) {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                className="even:bg-gray-400 odd:bg-gray-300"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell 
+                    key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

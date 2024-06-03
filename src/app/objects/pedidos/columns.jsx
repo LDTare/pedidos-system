@@ -46,6 +46,31 @@ export const columns = [
   {
     header: "Estado",
     accessorKey: "estado",
+    cell: ({ row }) => {
+      const estado = row.original;
+      switch (estado.estado) {
+        case "Pendiente":
+          return (
+            <span className=" bg-neutral-600 text-white rounded-full p-2">
+              {estado.estado}
+            </span>
+          );
+        case "Entregado":
+          return (
+            <span className="bg-black text-white rounded-full p-2">
+              {estado.estado}
+            </span>
+          );
+        case "Cancelado":
+          return (
+            <span className="bg-blue-950 text-white rounded-full p-2">
+              {estado.estado}
+            </span>
+          );
+        default:
+          return "Sin estado";
+      }
+    },
   },
   {
     header: "Acciones",

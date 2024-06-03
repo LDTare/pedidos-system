@@ -13,6 +13,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Sucursal {
+  id       Int      @id @default(autoincrement())
+  nombre   String
+  direccion String
+  telefono String
+  pedidos  Pedido[]
+}
+
 model Pedido {
   id            Int    @id @default(autoincrement())
   nombre        String
@@ -20,7 +28,8 @@ model Pedido {
   fecha_entrega DateTime?
   total         Int?
   estado        String
-
+  sucursal      Sucursal @relation(fields: [sucursalId], references: [id])
+  sucursalId    Int
   contenido Contenido[]
 }
 
