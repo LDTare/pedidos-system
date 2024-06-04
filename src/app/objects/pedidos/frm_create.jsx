@@ -24,7 +24,6 @@ export default function Formulario_Creacion() {
   const router = useRouter();
 
   const id = SearchBar();
-  console.log(id);
 
   const validationSchema = z.object({
     nombre: z.string().min(1, {

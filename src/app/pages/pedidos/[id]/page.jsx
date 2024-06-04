@@ -7,27 +7,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import ImprimirPDF from "@/app/objects/pedidos/pdf";
+import  ImprimirPDF  from "@/app/objects/pedidos/pdf";
 import { BtnEntregar } from "@/app/objects/pedidos/btn_entregar";
-import { BtnPreciosIng } from "@/app/objects/pedidos/btn_preciosIng"; 
+import { BtnPreciosIng } from "@/app/objects/pedidos/btn_preciosIng";
 import BtnRegresar from "@/app/objects/pedidos/btn_regresar";
 
-async function getPedido(id) {
+/**
+ * Carga los datos de un pedido desde la base de datos.
+ * @param {number} id - El ID del pedido a cargar.
+ * @returns {pedido} - Una promesa que se resuelve con el pedido cargado.
+ */
+async function cargarDatos(id) {
   const pedido = await db.pedido.findUnique({
     where: {
       id: parseInt(id),
     },
     include: {
       contenido: true,
+      sucursal: true,
     },
   });
   return pedido;
 }
 
-async function DetallesPedido({ params }) {
-  const pedido = await getPedido(params.id);
+async function Detalles_pedido({ params }) {
+  const pedido = await cargarDatos(params.id);
+
   const fecha_pedido = new Date(pedido.fecha_pedido);
   const fecha_entrega = new Date(pedido.fecha_entrega);
 
@@ -37,16 +42,16 @@ async function DetallesPedido({ params }) {
         <div className=" my-5 w-full rounded-md p-2">
           <p className="text-center font-bold text-2xl">Detalles del pedido </p>
         </div>
-       <div className=" font-medium mb-5">
-       <p>Cliente: {pedido.nombre}</p>
-        <p>Fecha del pedido: {fecha_pedido.toLocaleDateString()}</p>
-        <p>
-          Fecha de entrega :{" "}
-          {fecha_entrega.getFullYear() <= 1970
-            ? "Pendiente"
-            : fecha_entrega.toLocaleDateString()}
-        </p>
-       </div>
+        <div className=" font-medium mb-5">
+          <p>Cliente: {pedido.nombre}</p>
+          <p>Fecha del pedido: {fecha_pedido.toLocaleDateString()}</p>
+          <p>
+            Fecha de entrega :{" "}
+            {fecha_entrega.getFullYear() <= 1970
+              ? "Pendiente"
+              : fecha_entrega.toLocaleDateString()}
+          </p>
+        </div>
         <div className=" flex-1 space-y-5">
           <Card>
             <CardHeader>
@@ -112,19 +117,17 @@ async function DetallesPedido({ params }) {
                 {pedido.estado === "Entregado" ? (
                   <BtnEntregar pedido={pedido} />
                 ) : null}
-                
+
                 <ImprimirPDF pedido={pedido} />
 
               </div>
             </CardFooter>
           </Card>
 
-          <div className="mt-2">
-            <BtnRegresar />
-          </div>
+          <BtnRegresar />
         </div>
       </div>
     </div>
   );
 }
-export default DetallesPedido;
+export default Detalles_pedido;

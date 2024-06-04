@@ -1,11 +1,8 @@
 "use client";
 import Image from "next/image";
 import { Label } from "@/components/ui/label";
-import { buttonVariants } from "@/components/ui/button";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
-import { guardarSucursal } from "./utils/sucursal";
 
 import {
   Card,
@@ -96,7 +93,6 @@ export default function Home() {
                   <Button
                     variant="outline"
                     onClick={() => {
-                      guardarSucursal(sucursal);
                       router.push("/pages/pedidos/dashboard/" + sucursal.id);
                     }}
                   >

@@ -3,8 +3,8 @@ import { useSearchParams } from "next/navigation";
 export default function SearchBar() {
     const searchParams = useSearchParams();
 
-    const id = searchParams.get("id");
+    const sucursalID = searchParams.get("id");
 
-    return id;
+    return sucursalID;
 
 }

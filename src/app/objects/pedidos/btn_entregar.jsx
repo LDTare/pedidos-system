@@ -5,11 +5,10 @@ import { useRouter } from "next/navigation";
 
 export function BtnEntregar({ pedido }) {
     const router = useRouter();
-    const fecha = new Date();
   return (
     <Button
       className=" w-full"
-      variant="outline"
+      variant="delivery"
       onClick={async () => {
         const res = await fetch("/api/pedidos/" + pedido.id, {
           method: "PUT",
