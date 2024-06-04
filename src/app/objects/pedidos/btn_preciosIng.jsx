@@ -6,7 +6,7 @@ export function BtnPreciosIng({ pedido }) {
     const router = useRouter();
   return (
     <Button
-      className=" w-full"
+      className="w-full"
       variant="outline"
       onClick={
         () => {

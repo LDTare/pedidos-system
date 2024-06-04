@@ -9,7 +9,7 @@ export function BtnEntregar({ pedido }) {
   return (
     <Button
       className=" w-full"
-      variant="delivery"
+      variant="outline"
       onClick={async () => {
         const res = await fetch("/api/pedidos/" + pedido.id, {
           method: "PUT",

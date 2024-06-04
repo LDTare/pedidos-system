@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
-function createPDF(pedido) {
+function createPDF({pedido}) {
+
+  console.log(pedido);
 
   const year = new Date().getFullYear();
   const doc = new jsPDF({
