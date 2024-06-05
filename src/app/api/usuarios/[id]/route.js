@@ -6,7 +6,7 @@ export async function GET( request, { params }){
     try {
        const user = await db.user.findUnique({
               where: {
-                id: Number(params.id)
+                id: params.id
               }
          });
         return NextResponse.json(user);
@@ -18,6 +18,8 @@ export async function GET( request, { params }){
 export async function PUT(request, { params }){
     const data = await request.json();
 
+    delete data.confirmPassword;
+
     //handle password hashing
     if(data.password){
         data.password = await bcrypt.hash(data.password, 10);
@@ -26,7 +28,7 @@ export async function PUT(request, { params }){
     try {
         const user = await db.user.update({
             where: {
-                id: Number(params.id)
+                id: params.id
             },
             data: {
                 ...data,
@@ -34,6 +36,6 @@ export async function PUT(request, { params }){
         });
         return NextResponse.json(user);
     } catch (error) {
-        return NextResponse.error(error);
+        return NextResponse.json({ message: error.message }, { status: 500 });
     }
 }

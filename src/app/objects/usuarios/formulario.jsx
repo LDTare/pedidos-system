@@ -18,6 +18,8 @@ import {
 //importaciones para los campos de formulario
 import { Input } from "@/components/ui/input";
 
+import SearchBar from "../search-bar";
+
 import { toast } from "sonner";
 
 //importaciones para comportamiento
@@ -25,6 +27,9 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 
 export function FrmUser() {
+
+  const  id  = SearchBar();
+
   //Estados para almacenar los datos del formulario
   const [user, setUser] = useState([]);
 
@@ -41,22 +46,22 @@ export function FrmUser() {
       name: z
         .string()
         .min(3, { message: "El nombre debe tener al menos 3 caracteres" })
-        .default(params.id ? user?.name : ""),
+        .default(id ? user?.name : ""),
       username: z
         .string()
         .min(3, {
           message: "El nombre de usuario debe tener al menos 3 caracteres",
         })
-        .default(params.id ? user?.username : ""),
+        .default(id ? user?.username : ""),
       email: z
         .string()
         .email({ message: "El email no es válido" })
-        .default(params.id ? user?.email : ""),
+        .default(id ? user?.email : ""),
       password: z
         .string()
         .min(6, { message: "La contraseña debe tener al menos 6 caracteres" })
-        .default(params.id ? user?.password : ""),
-      confirmPassword: z.string().default(params.id ? user?.password : ""),
+        .default(id ? user?.password : ""),
+      confirmPassword: z.string().default(id ? user?.password : ""),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: "Las contraseñas no coinciden",
@@ -65,8 +70,8 @@ export function FrmUser() {
 
   //Hook para manejar el formulario
   useEffect(() => {
-    if (params.id) {
-      const promesaUsuario = fetch("/api/usuarios/" + params.id, {
+    if (id) {
+      const promesaUsuario = fetch("/api/usuarios/" + id, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -96,32 +101,58 @@ export function FrmUser() {
 
   //Función para enviar el formulario
   async function onSubmit(data) {
-    const promesa = fetch("/api/usuarios", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    if(id){
+      const promesaUsuario = fetch("/api/usuarios/" + id, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    toast.promise(promesa, {
-      loading: "Guardando usuario...",
-      success: "Usuario guardado",
-      error: "Error al guardar el usuario",
-    });
+      toast.promise(promesaUsuario, {
+        loading: "Actualizando usuario...",
+        success: "Usuario actualizado",
+        error: "Error al actualizar el usuario",
+      });
 
-    const response = await promesa;
-    if (response.ok) {
-      router.push("/pages/usuarios/dashboard");
+      const res = await promesaUsuario;
+      if (res.ok) {
+        router.refresh();
+      } else {
+        const data = await res.json();
+        setError(data.message);
+      }
     } else {
-        const msg_server = await response.json();
-      setError(msg_server.message);
+      const promesa = fetch("/api/usuarios", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+  
+      toast.promise(promesa, {
+        loading: "Guardando usuario...",
+        success: "Usuario guardado",
+        error: "Error al guardar el usuario",
+      });
+  
+      const response = await promesa;
+      if (response.ok) {
+        router.refresh();
+        router.push("/pages/usuarios/dashboard");
+      } else {
+          const msg_server = await response.json();
+        setError(msg_server.message);
+      }
     }
+      
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form className=" space-y-5"  onSubmit={form.handleSubmit(onSubmit)}>
         {error && <p>{error}</p>}
         <FormField
           control={form.control}
@@ -133,7 +164,7 @@ export function FrmUser() {
                 <Input
                   placeholder="Nombre del empleado"
                   {...field}
-                  defaultValue={params.id ? user?.name : ""}
+                  defaultValue={id ? user?.name : ""}
                 />
               </FormControl>
               <FormDescription>
@@ -153,7 +184,7 @@ export function FrmUser() {
                 <Input
                   placeholder="Nombre de usuario"
                   {...field}
-                  defaultValue={params.id ? user?.username : ""}
+                  defaultValue={id ? user?.username : ""}
                 />
               </FormControl>
               <FormDescription>
@@ -173,7 +204,7 @@ export function FrmUser() {
                 <Input
                   placeholder="Correo electrónico"
                   {...field}
-                  defaultValue={params.id ? user?.email : ""}
+                  defaultValue={id ? user?.email : ""}
                 />
               </FormControl>
               <FormDescription>
@@ -194,7 +225,7 @@ export function FrmUser() {
                   type="password"
                   placeholder="Contraseña"
                   {...field}
-                  defaultValue={params.id ? user?.password : ""}
+
                 />
               </FormControl>
               <FormDescription>
@@ -215,7 +246,7 @@ export function FrmUser() {
                   type="password"
                   placeholder="Confirmar contraseña"
                   {...field}
-                  defaultValue={params.id ? user?.password : ""}
+
                 />
               </FormControl>
               <FormDescription>
@@ -226,13 +257,22 @@ export function FrmUser() {
           )}
         />
 
-        <Button type="submit">Guardar</Button>
-        <Button
-          type="button"
-          onClick={() => router.push("/pages/usuarios/dashboard")}
+        <div className=" space-x-5 py-5">
+        <Button type="submit">
+          {id ? "Actualizar" : " Guardar"}
+          </Button>
+        {
+          !id ? <Button
+          type="reset"
+          variant="outline"
+          onClick={() => {
+            router.push("/pages/usuarios/dashboard");
+          }}
         >
           Cancelar
-        </Button>
+        </Button> : ""
+        }
+        </div>
       </form>
     </Form>
   );

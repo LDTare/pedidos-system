@@ -2,6 +2,7 @@ import { db } from "@/lib/prisma";
 import Link from "next/link";
 import { columns } from "@/app/objects/usuarios/columns";
 import { DataTable } from "@/app/objects/usuarios/data-table";
+import { buttonVariants } from "@/components/ui/button";
 
 async function cargarUsuarios() {
   return await db.user.findMany();
@@ -19,12 +20,15 @@ async function Usuarios_dashboard() {
             </h1>
         </div>
 
-        <div>
-            <Link href="/pages/usuarios/new">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <div className="container mx-auto py-5">
+            <div className="py-5">
+            <Link
+            className={buttonVariants({ variant: "outline" })}
+                href={`/pages/usuarios/new`}
+            >
                 Registrar un nuevo usuario
-            </button>
             </Link>
+            </div>
         </div>
         <div className="container mx-auto py-5">
             <DataTable columns={columns} data={usuarios} />

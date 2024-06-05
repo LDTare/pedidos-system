@@ -20,18 +20,12 @@ export const columns = [
             const router = useRouter();
             const { id } = row.original;
             return (
-                <div className="flex justify-center space-x-2">
+                <div className="flex justify-center align-middle max-w-72">
                     <button
-                        onClick={() => console.log("Editar", id) }
-                        className="bg-primary-500 text-white px-4 py-1 rounded"
+                        onClick={() => router.push("/pages/perfil?id=" + id)}
+                        className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
                     >
                         Editar
-                    </button>
-                    <button
-                        onClick={() => router.push(`/pages/usuarios/${id}`)}
-                        className="bg-neutral-600 text-white px-4 py-1 rounded"
-                    >
-                        Eliminar
                     </button>
                 </div>
             );

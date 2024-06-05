@@ -1,10 +1,6 @@
-import Link from "next/link"
-
-
-import { cn } from "@/lib/utils"
 
 import { MainNav } from "./navbar"
-import { buttonVariants } from "@/components/ui/button"
+import { UserNav } from "./user_drop"
 
 export function SiteHeader() {
   return (
@@ -13,7 +9,7 @@ export function SiteHeader() {
         <MainNav />
         <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
           <div className="w-full flex-1 md:w-auto md:flex-none">
-            Usuario logeado
+            <UserNav />
           </div>
         </div>
       </div>

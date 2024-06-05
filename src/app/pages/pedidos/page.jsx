@@ -4,6 +4,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
+import { useSession } from "next-auth/react";
+
 import {
   Card,
   CardContent,
@@ -20,6 +22,8 @@ import { toast } from "sonner";
 export default function PedidosPage() {
   const [error, setError] = useState(null);
   const [sucursales, setSucursales] = useState([]);
+
+  const { data: session, status } = useSession();
 
   const router = useRouter();
 
@@ -46,7 +50,6 @@ export default function PedidosPage() {
     };
     fetchSucursal();
   }, []);
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-center border">
       <div className=" text-center font-light text-3xl">

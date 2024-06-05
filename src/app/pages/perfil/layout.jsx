@@ -1,21 +1,31 @@
 "use client";
 import { Separator } from "@radix-ui/react-select";
 import { SidebarNav } from "@/app/objects/inicio/sidebar-nav";
+import { useSession } from "next-auth/react";
 
-const sidebarNavItems = [
-  {
-    title: "Perfil",
-    href: "/pages/perfil",
-  },
-  {
-    title: "Acerca de",
-    href: "/pages/perfil/About",
-  },
-];
+function SearchBar() {
+  const { data: session, status } = useSession();
+  return session?.user.id;
+}
+
 export default function SettingsLayout({ children }) {
+
+  const user = SearchBar();
+
+  const sidebarNavItems = [
+    {
+      title: "Perfil",
+      href: "/pages/perfil?id="+user,
+    },
+    {
+      title: "Acerca de",
+      href: "/pages/perfil/About",
+    },
+  ];
+
   return (
     <>
-      <div className="hidden space-y-6 p-10 pb-16 md:block">
+      <div className="container hidden space-y-6 p-10 pb-16 md:block">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Ajustes</h2>
           <p className="text-muted-foreground">
