@@ -56,10 +56,10 @@ async function Detalles_pedido({ params }) {
           <Card>
             <CardHeader>
               <CardTitle>
-                <p className="text-xl font-bold">Pedido N° {pedido.id}</p>
+                Pedido N° {pedido.id}
               </CardTitle>
               <CardDescription>
-                <p className="text-lg">Estado: {pedido.estado}</p>
+                 Estado: {pedido.estado}
               </CardDescription>
             </CardHeader>
             <CardContent>

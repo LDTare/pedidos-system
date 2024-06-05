@@ -37,7 +37,7 @@ function createPDF({pedido}) {
 
   // Set the font size and position for the address
   doc.setFontSize(9.5);
-  doc.text(`Direccion: ${pedido.sucursal.direccion}, ${pedido.sucursal.nombre}`, 33, 36);
+  doc.text(`Direccion: ${pedido.sucursal.direccion}`, 33, 36);
 
   // Draw a rectangle for the order number and year
   doc.rect(125, 27, 45, 10, "S");
@@ -99,7 +99,7 @@ function createPDF({pedido}) {
     margin:{
       left:33,
     },
-    head: [["Cantidad", "Productos", "Precio unitario"]],
+    head: [["Cantidad", "Productos", "Precio U."]],
     body: pedido.contenido.map((producto) => [
       producto.cantidad,
       producto.producto,
@@ -130,7 +130,7 @@ function ImprimirPDF( pedido ) {
   return (
     <Button
       onClick={() => createPDF(pedido)}
-      className="w-full"
+      className="mx-2"
       variant="default"
     >
       Imprimir recibo

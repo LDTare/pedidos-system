@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import ImprimirPDF from "./pdf";
 
 export const columns = [
   {
@@ -78,12 +79,17 @@ export const columns = [
       const router = useRouter();
       const pedido = row.original;
       return (
-        <button
+        <div className="flex justify-center align-middle max-w-72">
+          <button
           onClick={() => router.push("/pages/pedidos/" + pedido.id)}
-          className="bg-blue-500 hover:bg-blue-700 text-white font py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
         >
           Ver detalles
         </button>
+
+        <ImprimirPDF pedido={pedido} />
+
+        </div>
       );
     },
   },

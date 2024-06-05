@@ -17,7 +17,6 @@ const fontSans = FontSans({
 export default function RootLayout({ children }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <head />
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
