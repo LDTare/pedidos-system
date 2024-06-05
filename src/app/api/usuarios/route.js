@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/prisma";
-import * as argon2 from "argon2";
+import bcrypt from 'bcrypt';
 
 export async function GET() {
   try {
@@ -43,7 +43,7 @@ export async function POST(request) {
     }
 
     //Hash the password
-    data.password = await argon2.hash(data.password);
+    data.password = await bcrypt.hash(data.password, 10);
 
     const user = await db.user.create({
       data: {

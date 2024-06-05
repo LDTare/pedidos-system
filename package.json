@@ -25,6 +25,7 @@
     "@react-spring/web": "^9.7.3",
     "@tanstack/react-table": "^8.16.0",
     "argon2": "^0.40.3",
+    "bcrypt": "^5.1.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "embla-carousel-autoplay": "^8.1.3",
