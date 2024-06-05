@@ -13,6 +13,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  username      String?         @unique
+  password      String?
+  email         String?         @unique
+}
+
 model Sucursal {
   id       Int      @id @default(autoincrement())
   nombre   String
@@ -26,7 +34,7 @@ model Pedido {
   nombre        String
   fecha_pedido  DateTime
   fecha_entrega DateTime?
-  total         Int?
+  total         Float?
   estado        String
   sucursal      Sucursal @relation(fields: [sucursalId], references: [id])
   sucursalId    Int
@@ -37,7 +45,7 @@ model Contenido {
   id       Int    @id @default(autoincrement())
   cantidad Int
   producto String
-  precio_u Int?
+  precio_u Float?
   subtotal  Int?
   pedido   Pedido @relation(fields: [pedidoId], references: [id])
   pedidoId Int

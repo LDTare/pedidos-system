@@ -13,8 +13,6 @@ export async function GET(){
 export async function POST(request){
     const data = await request.json();
     const date = new Date();
-
-    console.log(data);
     try {
         const pedido = await db.pedido.create({
             data: {

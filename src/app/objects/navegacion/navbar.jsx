@@ -36,7 +36,7 @@ export function MainNav() {
           Ordenes
         </Link>
         <Link
-          href="/pages/usuarios"
+          href="/pages/usuarios/dashboard"
           className={cn(
             "transition-colors hover:text-foreground/80",
             pathname === "/pages/usuarios" ? "text-foreground" : "text-foreground/60"

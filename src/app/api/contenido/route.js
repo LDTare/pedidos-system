@@ -12,7 +12,6 @@ export async function GET(){
 
 export async function POST(request){
     const data = await request.json();
-    console.log(data);
     try {
         const pedido = await db.contenido.createMany({
             data: data, skipDuplicates: true
