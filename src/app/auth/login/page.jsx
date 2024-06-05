@@ -35,7 +35,7 @@ function LoginPage() {
         <div className="max-w-md text-center">
           <img
             className="mx-auto h-auto w-auto rounded-full"
-            src="/logo.jpeg"
+            src="/Logo.jpeg"
             alt="Puntada dorada Logo"
           />
         </div>
