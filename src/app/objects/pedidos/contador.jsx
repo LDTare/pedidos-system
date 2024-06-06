@@ -30,14 +30,14 @@ export default function Contadores(pedido) {
         let totalEntregados = 0;
         let totalCancelados = 0;
         pedido.pedidos.forEach((pedido) => {
-            totalGanancias += pedido.total;
-            totalPedidos++;
             if (pedido.estado === "Pendiente") {
                 totalPendientes++;
             } else if (pedido.estado === "Entregado") {
                 totalEntregados++;
             } else if (pedido.estado === "Cancelado") {
                 totalCancelados++;
+                totalGanancias += pedido.total;
+                totalPedidos++;
             }
         });
         setTotalGanancias(totalGanancias);
