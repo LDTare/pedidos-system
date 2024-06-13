@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import BtnEliminar from "./btn_eliminar";
 import ImprimirPDF from "./pdf";
 
 export const columns = [
@@ -79,7 +80,7 @@ export const columns = [
       const router = useRouter();
       const pedido = row.original;
       return (
-        <div className="flex justify-center align-middle max-w-72">
+        <div className="flex justify-center align-middle w-auto">
           <button
           onClick={() => router.push("/pages/pedidos/" + pedido.id)}
           className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded"
@@ -89,6 +90,7 @@ export const columns = [
 
         <ImprimirPDF pedido={pedido} />
 
+        <BtnEliminar pedido={pedido} />
         </div>
       );
     },

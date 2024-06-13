@@ -15,6 +15,7 @@ export async function GET(request, { params }){
 }
 
 export async function PUT(request, { params }){
+    console.log(params);
     const data = await request.json();
     try {
         const pedido = await db.pedido.update({

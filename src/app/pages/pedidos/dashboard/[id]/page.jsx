@@ -9,6 +9,9 @@ async function cargarPedidos(id_sucursal) {
   return await db.pedido.findMany({
     where: {
       sucursalId: parseInt(id_sucursal),
+      estado: {
+        not: "Eliminado",
+      },
     },
     include: {
       sucursal: true,

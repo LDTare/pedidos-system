@@ -3,7 +3,13 @@ import { db } from "@/lib/prisma";
 
 export async function GET(){
     try {
-        const pedidos = await db.pedido.findMany([]);
+        const pedidos = await db.pedido.findMany([{
+            where: {
+                estado: {
+                    not : "Eliminado"
+                }
+            },
+        }]);
         return NextResponse.json(pedidos);
     } catch (error) {
         return NextResponse.error(error);
