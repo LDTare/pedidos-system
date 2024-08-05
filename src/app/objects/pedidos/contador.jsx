@@ -66,7 +66,7 @@ export default function Contadores(pedido) {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold"> Q. {totalGanancias} </div>
+          <div className="text-2xl font-bold"> Q. {totalGanancias.toFixed(2)} </div>
           <p className="text-xs text-muted-foreground">
             Generadas
           </p>
